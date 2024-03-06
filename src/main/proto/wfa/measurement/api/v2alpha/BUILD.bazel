@@ -1,5 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_java//java:defs.bzl", "java_proto_library")
+load("@rules_jvm_external//:defs.bzl", "java_export")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -17,6 +18,15 @@ proto_library(
 java_proto_library(
     name = "java_proto",
     deps = ["crypto_proto"],
+)
+
+java_export(
+  name = "exported_lib",
+  maven_coordinates = "io.github.yuhongwang-amazon:java_proto:0.0.1",
+  srcs = [],
+  deps = [
+    ":java_proto",
+  ],
 )
 
 proto_library(
