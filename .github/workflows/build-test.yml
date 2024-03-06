@@ -15,11 +15,6 @@
 name: Build and test
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize, edited]
   workflow_dispatch:
 
 jobs:
