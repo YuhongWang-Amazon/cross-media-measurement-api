@@ -15,3 +15,10 @@ jobs:
           key: bazel
       - run: bazel build //src/main/proto/wfa/measurement/api/v2alpha:java_proto
 
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: proto_jars
+          path: bazel-bin/src/main/proto/wfa/measurement/api/v2alpha
+          overwrite: true
+          
