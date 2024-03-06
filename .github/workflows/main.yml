@@ -13,4 +13,5 @@ jobs:
         with:
           path: "~/.cache/bazel"
           key: bazel
-      - run: bazel build //...
+      - run: bazel build //src/main/proto/wfa/measurement/api/v2alpha:java_proto
+
