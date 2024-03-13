@@ -3,6 +3,16 @@ module(
     repo_name = "wfa_measurement_proto",
 )
 
+KOTLIN_RELEASE_VERSION = "1.8.22"
+
+KOTLINX_COROUTINES_VERSION = "1.7.3"
+
+GRPC_JAVA_VERSION = "1.61.1"
+
+GRPC_KOTLIN_VERSION = "1.4.1"
+
+PROTOBUF_JAVA_VERSION = "3.23.4"  # Compatible with protobuf version.
+
 # Bazel Central Registry deps.
 bazel_dep(
     name = "rules_proto",
@@ -17,12 +27,74 @@ bazel_dep(
     name = "rules_jvm_external",
     version = "6.0",
 )
+bazel_dep(
+    name = "rules_java",
+    version = "7.4.0",
+)
+bazel_dep(
+    name = "rules_cc",
+    version = "0.0.9",
+)
 
 # WFA registry deps.
 bazel_dep(
     name = "googleapis",
     version = "0.0.0-bzlmod.1",
     repo_name = "com_google_googleapis",
+)
+
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        "io.grpc:grpc-api:" + GRPC_JAVA_VERSION,
+        "io.grpc:grpc-protobuf:" + GRPC_JAVA_VERSION,
+        "io.grpc:grpc-stub:" + GRPC_JAVA_VERSION,
+        "io.grpc:grpc-netty-shaded:" + GRPC_JAVA_VERSION,
+        "io.grpc:grpc-kotlin-stub:" + GRPC_KOTLIN_VERSION,
+        "com.google.protobuf:protobuf-java:" + PROTOBUF_JAVA_VERSION,
+        "com.google.protobuf:protobuf-kotlin:" + PROTOBUF_JAVA_VERSION,
+        "com.google.guava:failureaccess:1.0.2",
+        "com.google.guava:guava:33.0.0-jre",
+        "org.apache.tomcat:annotations-api:6.0.53",
+        "com.google.api.grpc:proto-google-common-protos:2.34.0",
+    ],
+    fetch_sources = True,  # For IDE integration.
+    strict_visibility = True,
+    exclusions = [
+        # Required because of https://github.com/bazelbuild/rules_jvm_external/issues/966
+        "io.grpc:grpc-util",
+        "io.grpc:grpc-core",
+    ],
+    repositories = [
+        "https://repo.maven.apache.org/maven2/",
+    ],
+    generate_compat_repositories = True,
+    lock_file = "//:maven_install.json",
+)
+use_repo(
+    maven,
+    "com_google_guava_guava",
+    "com_google_api_grpc_proto_google_common_protos",
+    "com_google_j2objc_j2objc_annotations",
+    "com_google_guava_failureaccess",
+    "io_grpc_grpc_api",
+    "io_grpc_grpc_core",
+    "io_grpc_grpc_netty",
+    "io_grpc_grpc_protobuf",
+    "io_grpc_grpc_protobuf_lite",
+    "io_grpc_grpc_stub",
+    "io_netty_netty_common",
+    "io_netty_netty_transport",
+    "io_netty_netty_transport_classes_epoll",
+    "io_netty_netty_transport_classes_kqueue",
+    "io_netty_netty_transport_native_epoll",
+    "io_netty_netty_transport_native_unix_common",
+    "org_apache_tomcat_annotations_api",
+    "maven",
+    jsr305_annotations = "com_google_code_findbugs_jsr305",
+    error_prone_annotations = "com_google_errorprone_error_prone_annotations",
+
 )
 
 non_module_deps = use_extension("//build:non_module_deps.bzl", "non_module_deps")

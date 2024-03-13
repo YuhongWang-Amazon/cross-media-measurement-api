@@ -1,8 +1,53 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_java//java:defs.bzl", "java_proto_library")
 load("@rules_jvm_external//:defs.bzl", "java_export")
+load("@io_grpc_grpc_java//:java_grpc_library.bzl", "java_grpc_library")
 
 package(default_visibility = ["//visibility:public"])
+
+java_proto_library(
+    name = "java_proto",
+    deps = [
+        "//src/main/proto/wfa/measurement/api/v2alpha:encrypted_sketch_proto",
+        "//src/main/proto/wfa/measurement/api/v2alpha:event_groups_service_proto",
+        "//src/main/proto/wfa/measurement/api/v2alpha:event_group_proto"
+    ],
+)
+
+java_grpc_library(
+    name = "java_grpc_proto",
+    srcs = [
+        ":event_groups_service_proto",
+    ],
+    deps = [
+        ":java_proto"
+    ]
+)
+
+java_export(
+  name = "exported_lib_to_codeartifact",
+  maven_coordinates = "io.github.world-federation-of-advertisers:edp_java_proto:0.0.2",
+  pom_template = "pom.tmpl",
+  tags = ["manual"],
+  runtime_deps = [
+    ":java_proto",
+    ":java_grpc_proto",
+    "//imports/java/com/google/protobuf",
+    "@org_apache_tomcat_annotations_api//jar",
+  ],
+)
+
+java_export(
+  name = "exported_lib_to_maven",
+  maven_coordinates = "io.github.yuhongwang-amazon:java_proto:0.0.1",
+  pom_template = "pom.tmpl",
+  tags = ["manual"],
+  runtime_deps = [
+    ":java_proto",
+    ":java_grpc_proto",
+    "//imports/java/com/google/protobuf"
+  ],
+)
 
 IMPORT_PREFIX = "/src/main/proto"
 
@@ -13,20 +58,6 @@ proto_library(
     name = "encrypted_sketch_proto",
     srcs = ["encrypted_sketch.proto"],
     strip_import_prefix = IMPORT_PREFIX,
-)
-
-java_proto_library(
-    name = "java_proto",
-    deps = ["crypto_proto"],
-)
-
-java_export(
-  name = "exported_lib",
-  maven_coordinates = "io.github.yuhongwang-amazon:java_proto:0.0.1",
-  srcs = [],
-  deps = [
-    ":java_proto",
-  ],
 )
 
 proto_library(
