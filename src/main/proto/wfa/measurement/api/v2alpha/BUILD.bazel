@@ -25,8 +25,8 @@ java_grpc_library(
 )
 
 java_export(
-  name = "exported_lib_to_codeartifact",
-  maven_coordinates = "io.github.world-federation-of-advertisers:edp_java_proto:0.0.2",
+  name = "exported_lib",
+  maven_coordinates = "io.github.yuhongwang-amazon:java_proto:0.0.3",
   pom_template = "pom.tmpl",
   tags = ["manual"],
   runtime_deps = [
@@ -34,18 +34,6 @@ java_export(
     ":java_grpc_proto",
     "//imports/java/com/google/protobuf",
     "@org_apache_tomcat_annotations_api//jar",
-  ],
-)
-
-java_export(
-  name = "exported_lib_to_maven",
-  maven_coordinates = "io.github.yuhongwang-amazon:java_proto:0.0.1",
-  pom_template = "pom.tmpl",
-  tags = ["manual"],
-  runtime_deps = [
-    ":java_proto",
-    ":java_grpc_proto",
-    "//imports/java/com/google/protobuf"
   ],
 )
 
