@@ -26,7 +26,7 @@ java_grpc_library(
 
 java_export(
   name = "exported_lib",
-  maven_coordinates = "io.github.yuhongwang-amazon:java_proto:0.0.3",
+  maven_coordinates = "io.github.yuhongwang-amazon:edp_java_proto:0.0.3",
   pom_template = "pom.tmpl",
   tags = ["manual"],
   runtime_deps = [
